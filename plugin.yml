@@ -1,0 +1,6 @@
+name: OIDC Token
+description: Request a Buildkite OIDC token for the current job
+author: https://github.com/buildkite
+requirements:
+  - curl
+  - jq

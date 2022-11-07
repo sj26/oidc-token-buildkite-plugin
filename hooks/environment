@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo "--- 🔐 Requesting OIDC token from Buildkite"
+
+RESPONSE="$(curl -s -X POST -H "Authorization: Token ${BUILDKITE_AGENT_ACCESS_TOKEN}" \
+  "${BUILDKITE_AGENT_ENDPOINT:-https://agent.buildkite.com/v3}/jobs/${BUILDKITE_JOB_ID}/oidc/tokens" \
+  --data "{}")"
+
+if [[ $? -ne 0 ]]; then
+  echo "^^^ +++"
+  echo "Failed to fetch OIDC token:"
+  echo "${RESPONSE}"
+  exit 1
+fi
+ 
+export BUILDKITE_OIDC_TOKEN="$(jq -r .token <<< "${RESPONSE}")"
